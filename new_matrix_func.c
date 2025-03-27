@@ -1,7 +1,7 @@
 #include "new_matrix.h"
 #include <stdio.h>
 #include <string.h>
-
+#include <math.h>
 
 
 matrix_t* new_matrix(matrix_vtable_t* func, int rows, int cols, FieldInfo* type_element)
@@ -399,7 +399,87 @@ void LU_Decomposition(matrix_t* A, matrix_t* L, matrix_t* U)
     }
 }
 
+double Determinant(matrix_t* A) {
 
+    if (A->data.rows != A->data.cols) {
+        fprintf(stderr, "Матрица не квадратная\n");
+        return NAN;
+    }
+
+    if (A->Type != get_type_element_Double()) {
+        fprintf(stderr, "Матрица не типа double\n");
+        return NAN;
+    }
+
+    int n = A->data.rows;
+
+    matrix_t* L = new_matrix(get_table_matrix_Double(), n, n, get_type_element_Double());
+    matrix_t* U = new_matrix(get_table_matrix_Double(), n, n, get_type_element_Double());
+
+    LU_Decomposition(A, L, U);
+
+    double det = 1.0;
+    for (int i = 0; i < n; i++) {
+        double elem = ((double*)U->data.elem)[i * n + i];
+        det *= elem;
+    }
+
+    FreeMatrix(L);
+    FreeMatrix(U);
+
+    return det;
+}
+
+matrix_t* CopyMatrix(matrix_t* A) {
+    matrix_t* copy = new_matrix(A->func, A->data.rows, A->data.cols, A->Type);
+    for (int i = 0; i < A->data.rows; i++) {
+        for (int j = 0; j < A->data.cols; j++) {
+            copy->func->Input(copy, i, j, Get(A, i, j));
+        }
+    }
+    return copy;
+}
+
+void ReplaceColumn(matrix_t* A, int col, matrix_t* b) {
+    for (int i = 0; i < A->data.rows; i++) {
+        A->func->Input(A, i, col, Get(b, i, 0));
+    }
+}
+
+matrix_t* CramerMethod(matrix_t* A, matrix_t* b) {
+
+    if (A->data.rows != A->data.cols || A->data.rows != b->data.rows || b->data.cols != 1) {
+        fprintf(stderr, "Неверные размеры матриц для метода Крамера\n");
+        return NULL;
+    }
+
+    if (A->Type != get_type_element_Double() || b->Type != get_type_element_Double()) {
+        fprintf(stderr, "Метод Крамера реализован только для матриц типа double\n");
+        return NULL;
+    }
+
+    int n = A->data.rows;
+
+    double det_A = Determinant(A);
+
+    if (det_A == 0.0) {
+        fprintf(stderr, "Матрица A вырождена, метод Крамера неприменим\n");
+        return NULL;
+    }
+
+    matrix_t* x = new_matrix(get_table_matrix_Double(), n, 1, get_type_element_Double());
+
+    for (int i = 0; i < n; i++) {
+        matrix_t* A_i = CopyMatrix(A);
+        ReplaceColumn(A_i, i, b);
+        double det_A_i = Determinant(A_i);
+        double x_i = det_A_i / det_A;
+        x->func->Input(x, i, 0, &x_i);
+        FreeMatrix(A_i);
+    }
+
+    return x;
+}
 
 
 //-----------Работа с файлами-----------

@@ -136,8 +136,10 @@ void DivDouble(void* a, void* b, void* result);
 void LU_Decomposition(matrix_t* A, matrix_t* L, matrix_t* U);
 void SubDouble(void* a, void* b, void* result);
 
-
-
+double Determinant(matrix_t* A);
+matrix_t* CopyMatrix(matrix_t* A);
+void ReplaceColumn(matrix_t* A, int col, matrix_t* b);
+matrix_t* CramerMethod(matrix_t* A, matrix_t* b);
 
 //-----------Файлы-----------
 

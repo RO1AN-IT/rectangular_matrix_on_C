@@ -43,10 +43,10 @@ int main(void){
 
     //printf("%d", (int)examp->data.elem + 1 * examp->data.cols + 1);
 
-    // char* answer = toStringMatrix(examp1);
-    // printf("\n1 %s",answer);
-    // free(answer);
-    // printf("\n2 %s",toStringMatrix(examp2));
+    matrix_t* x = CramerMethod(examp1, examp2);
+    char* answer = toStringMatrix(x);
+    printf("\n1 %s",answer);
+    free(answer);
 
     // complex_double skal;
     // scanf("%lf %lf", &skal.Re, &skal.Im);
