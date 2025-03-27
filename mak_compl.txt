@@ -1,0 +1,119 @@
+------------------------------------Сборщик тестов------------------------------------
+CC = gcc
+FLAGS = -Wno-error=incompatible-function-pointer-types -Wno-incompatible-function-pointer-types -Wno-visibility -Wno-incompatible-pointer-types -g -O0
+
+program.out: Tests/main_test.o Tests/Test.o Tests/INT_TEST/INT_test.o Tests/FLOAT_TEST/FLOAT_test.o Tests/DOUBLE_TEST/DOUBLE_test.o Tests/COMPLEX_INTEGER_TEST/COMPLEX_INTEGER_test.o Tests/COMPLEX_DOUBLE_TEST/COMPLEX_DOUBLE_test.o COMPLEX_INTEGER/complex_integer.o COMPLEX_DOUBLE/complex_double.o new_matrix_func.o INT/INT_func.o FLOAT/FLOAT_func.o DOUBLE/DOUBLE_func.o
+	$(CC) -g -Wall $^ -o $@
+
+Tests/main_test.o: Tests/main_test.c
+	@mkdir -p Tests
+	$(CC) -c $< $(FLAGS) -o $@
+
+Tests/Test.o: Tests/Test.c
+	@mkdir -p Tests
+	$(CC) -c $< $(FLAGS) -o $@
+
+Tests/INT_TEST/INT_test.o: Tests/INT_TEST/INT_test.c
+	@mkdir -p Tests/INT_TEST
+	$(CC) -c $< $(FLAGS) -o $@
+
+Tests/FLOAT_TEST/FLOAT_test.o: Tests/FLOAT_TEST/FLOAT_test.c
+	@mkdir -p Tests/FLOAT_TEST
+	$(CC) -c $< $(FLAGS) -o $@
+
+Tests/DOUBLE_TEST/DOUBLE_test.o: Tests/DOUBLE_TEST/DOUBLE_test.c
+	@mkdir -p Tests/DOUBLE_TEST
+	$(CC) -c $< $(FLAGS) -o $@
+
+Tests/COMPLEX_INTEGER_TEST/COMPLEX_INTEGER_test.o: Tests/COMPLEX_INTEGER_TEST/COMPLEX_INTEGER_test.c
+	@mkdir -p Tests/COMPLEX_INTEGER_TEST
+	$(CC) -c $< $(FLAGS) -o $@
+
+Tests/COMPLEX_DOUBLE_TEST/COMPLEX_DOUBLE_test.o: Tests/COMPLEX_DOUBLE_TEST/COMPLEX_DOUBLE_test.c
+	@mkdir -p Tests/COMPLEX_DOUBLE_TEST
+	$(CC) -c $< $(FLAGS) -o $@
+
+COMPLEX_DOUBLE/complex_double.o: COMPLEX_DOUBLE/complex_double.c
+	@mkdir -p COMPLEX_DOUBLE
+	$(CC) -c $< $(FLAGS) -o $@
+
+COMPLEX_INTEGER/complex_integer.o: COMPLEX_INTEGER/complex_integer.c
+	@mkdir -p COMPLEX_INTEGER
+	$(CC) -c $< $(FLAGS) -o $@
+
+new_matrix_func.o: new_matrix_func.c
+	$(CC) -c $< $(FLAGS) -o $@
+
+INT/INT_func.o: INT/INT_func.c
+	@mkdir -p INT
+	$(CC) -c $< $(FLAGS) -o $@
+
+FLOAT/FLOAT_func.o: FLOAT/FLOAT_func.c
+	@mkdir -p FLOAT
+	$(CC) -c $< $(FLAGS) -o $@
+
+DOUBLE/DOUBLE_func.o: DOUBLE/DOUBLE_func.c
+	@mkdir -p DOUBLE
+	$(CC) -c $< $(FLAGS) -o $@
+
+.PHONY: clean
+
+clean:
+	rm -f *.o
+	rm -f COMPLEX_INTEGER/*.o
+	rm -f COMPLEX_DOUBLE/*.o
+	rm -f Tests/INT_TEST/*.o
+	rm -f Tests/FLOAT_TEST/*.o
+	rm -f Tests/DOUBLE_TEST/*.o
+	rm -f Tests/COMPLEX_DOUBLE_TEST/*.o
+	rm -f Tests/COMPLEX_INTEGER_TEST/*.o
+	rm -f Tests/*.o
+	rm -f INT/*.o
+	rm -f FLOAT/*.o
+	rm -f DOUBLE/*.o
+
+fullclean: clean
+	rm -f *.out
+--------------------------------------------------------------------------------------
+
+-------------------------------Сборщик пользовательский-------------------------------
+CC=gcc
+FLAGS=-Wno-error=incompatible-function-pointer-types -Wno-incompatible-function-pointer-types -Wno-visibility -Wno-incompatible-pointer-types -g -O0
+
+program.out: new_laba1.o COMPLEX_INTEGER/complex_integer.c COMPLEX_DOUBLE/complex_double.c new_matrix_func.o INT/INT_func.o FLOAT/FLOAT_func.o DOUBLE/DOUBLE_func.o
+	$(CC) -g -Wall new_laba1.o COMPLEX_INTEGER/complex_integer.c COMPLEX_DOUBLE/complex_double.c new_matrix_func.o INT/INT_func.o FLOAT/FLOAT_func.o DOUBLE/DOUBLE_func.o -o program.out
+
+new_laba1.o: new_laba1.c
+	$(CC) -c new_laba1.c $(FLAGS) -o new_laba1.o
+
+complex_double.o: COMPLEX_DOUBLE/complex_double.c
+	$(CC) -c COMPLEX_DOUBLE/complex_double.c $(FLAGS) -o COMPLEX_DOUBLE/complex_double.c
+
+complex_integer.o: COMPLEX_INTEGER/complex_integer.c
+	$(CC) -c COMPLEX_INTEGER/complex_integer.c $(FLAGS) -o COMPLEX_INTEGER/complex_integer.c
+
+new_matrix_func.o: new_matrix_func.c
+	$(CC) -c new_matrix_func.c $(FLAGS) -o new_matrix_func.o
+
+INT_func.o: INT/INT_func.c
+	$(CC) -c INT/INT_func.c $(FLAGS) -o INT/INT_func.o
+
+FLOAT_func.o: FLOAT/FLOAT_func.c
+	$(CC) -c FLOAT/FLOAT_func.c $(FLAGS) -o FLOAT/FLOAT_func.o
+
+DOUBLE_func.o: DOUBLE/DOUBLE_func.c
+	$(CC) -c DOUBLE/DOUBLE_func.c $(FLAGS) -o DOUBLE/DOUBLE_func.o
+
+.PHONY: clean
+
+clean:
+	rm -f *.o
+	rm -f COMPLEX/*.o
+	rm -f INT/*.o
+	rm -f FLOAT/*.o
+	rm -f DOUBLE/*.o
+
+fullclean: clean
+	rm -f *.out
+
+--------------------------------------------------------------------------------------
